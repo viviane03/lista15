@@ -1,0 +1,85 @@
+import java.util.HashMap;
+import java.util.Map;
+
+public class UserManager {
+
+    // Instância única da classe
+    private static UserManager instance;
+
+    // Mapa para armazenar os usuários pelo ID
+    private Map<Integer, User> users;
+
+    // ID para controlar a criação de novos usuários
+    private int nextUserId;
+
+    // Construtor privado para evitar instanciação direta
+    private UserManager() {
+        users = new HashMap<>();
+        nextUserId = 1;
+    }
+
+    // Método estático para obter a instância única
+    public static synchronized UserManager getInstance() {
+        if (instance == null) {
+            instance = new UserManager();
+        }
+        return instance;
+    }
+
+    // Método para criar um novo usuário e retornar seu ID
+    public int createUser(String name, String email) {
+        int userId = nextUserId++;
+        users.put(userId, new User(userId, name, email));
+        return userId;
+    }
+
+    // Método para obter um usuário pelo ID
+    public User getUser(int userId) {
+        return users.get(userId);
+    }
+
+    // Método para atualizar as informações de um usuário
+    public void updateUser(int userId, String name, String email) {
+        if (users.containsKey(userId)) {
+            User user = users.get(userId);
+            user.setName(name);
+            user.setEmail(email);
+            System.out.println("Usuário atualizado com sucesso.");
+        } else {
+            System.out.println("Usuário não encontrado.");
+        }
+    }
+
+    // Classe interna para representar um usuário
+    private static class User {
+        private int id;
+        private String name;
+        private String email;
+
+        public User(int id, String name, String email) {
+            this.id = id;
+            this.name = name;
+            this.email = email;
+        }
+
+        public int getId() {
+            return id;
+        }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
+
+        public String getEmail() {
+            return email;
+        }
+
+        public void setEmail(String email) {
+            this.email = email;
+        }
+    }
+}
