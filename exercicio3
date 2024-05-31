@@ -1,0 +1,106 @@
+// Componente
+interface Coffee {
+    double cost();
+    String getDescription();
+}
+
+// Concrete Component
+class SimpleCoffee implements Coffee {
+    @Override
+    public double cost() {
+        return 2.0; // Preço base do café simples
+    }
+
+    @Override
+    public String getDescription() {
+        return "Café simples";
+    }
+}
+
+// Decorator
+abstract class CoffeeDecorator implements Coffee {
+    protected Coffee decoratedCoffee;
+
+    public CoffeeDecorator(Coffee decoratedCoffee) {
+        this.decoratedCoffee = decoratedCoffee;
+    }
+
+    public double cost() {
+        return decoratedCoffee.cost();
+    }
+
+    public String getDescription() {
+        return decoratedCoffee.getDescription();
+    }
+}
+
+// Concrete Decorator
+class Milk extends CoffeeDecorator {
+    public Milk(Coffee decoratedCoffee) {
+        super(decoratedCoffee);
+    }
+
+    @Override
+    public double cost() {
+        return super.cost() + 0.5; // Preço do leite
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", com leite";
+    }
+}
+
+// Concrete Decorator
+class Cream extends CoffeeDecorator {
+    public Cream(Coffee decoratedCoffee) {
+        super(decoratedCoffee);
+    }
+
+    @Override
+    public double cost() {
+        return super.cost() + 0.3; // Preço do creme
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", com creme";
+    }
+}
+
+// Concrete Decorator
+class Vanilla extends CoffeeDecorator {
+    public Vanilla(Coffee decoratedCoffee) {
+        super(decoratedCoffee);
+    }
+
+    @Override
+    public double cost() {
+        return super.cost() + 0.8; // Preço do xarope de baunilha
+    }
+
+    @Override
+    public String getDescription() {
+        return super.getDescription() + ", com xarope de baunilha";
+    }
+}
+
+// Cliente
+public class CoffeeShop {
+    public static void main(String[] args) {
+        // Pedido de um café simples
+        Coffee coffee = new SimpleCoffee();
+        System.out.println("Pedido: " + coffee.getDescription());
+        System.out.println("Preço: $" + coffee.cost());
+
+        // Pedido de um café com leite e creme
+        Coffee coffeeWithMilkAndCream = new Cream(new Milk(new SimpleCoffee()));
+        System.out.println("\nPedido: " + coffeeWithMilkAndCream.getDescription());
+        System.out.println("Preço: $" + coffeeWithMilkAndCream.cost());
+
+        // Pedido de um café com leite, creme e xarope de baunilha
+        Coffee coffeeWithMilkCreamAndVanilla = new Vanilla(new Cream(new Milk(new SimpleCoffee())));
+        System.out.println("\nPedido: " + coffeeWithMilkCreamAndVanilla.getDescription());
+        System.out.println("Preço: $" + coffeeWithMilkCreamAndVanilla.cost());
+    }
+}
